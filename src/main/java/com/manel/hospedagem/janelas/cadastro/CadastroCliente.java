@@ -1,11 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
-package com.manel.hospedagem.janelas;
+package com.manel.hospedagem.janelas.cadastro;
 
 import com.manel.hospedagem.controller.ClienteController;
+import static com.manel.hospedagem.janelas.Configuration.*;
+import javax.swing.JTextField;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.text.ParseException;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.text.MaskFormatter;
@@ -18,18 +19,10 @@ public class CadastroCliente extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
         setResizable(false);
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        
-        try {
-            MaskFormatter cpfMask = new MaskFormatter("###.###.###-##");
-            MaskFormatter telefoneMask = new MaskFormatter("(##) #########");
-            cpfMask.setPlaceholderCharacter('_');
-            telefoneMask.setPlaceholderCharacter('_');
-            cpfMask.install(txtCPF);
-            telefoneMask.install(txtTelefone);
-        } catch (ParseException e) {
-            JOptionPane.showMessageDialog(null, e);
-        }
+        impedirNumero(txtNome);
+        permitirNumeroFormatado(txtCPF);
+        permitirNumeroFormatado(txtTelefone);
+        formatarCpfTelefone();
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -47,7 +40,7 @@ public class CadastroCliente extends javax.swing.JFrame {
         btnSalvar = new javax.swing.JButton();
         btnFechar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de cliente");
         setPreferredSize(new java.awt.Dimension(400, 300));
 
@@ -197,16 +190,16 @@ public class CadastroCliente extends javax.swing.JFrame {
         return clienteController.adicionarCliente(txtNome.getText(), txtCPF.getText(), txtTelefone.getText(), txtPlacaDoCarro.getText());
     }
     
-    private verificarCaracterValido(TextFied textField){
-        textField.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                char c = e.getKeyChar();
-                // Verifica se o caractere não é uma letra (A-Z, a-z) ou tecla de controle (como Backspace)
-                if (!Character.isLetter(c) && !Character.isISOControl(c)) {
-                    e.consume(); // Cancela a entrada
-                }
-            }
-        });
+    private void formatarCpfTelefone(){
+        try {
+            MaskFormatter cpfMask = new MaskFormatter("###.###.###-##");
+            MaskFormatter telefoneMask = new MaskFormatter("(##) #########");
+            cpfMask.setPlaceholderCharacter('_');
+            telefoneMask.setPlaceholderCharacter('_');
+            cpfMask.install(txtCPF);
+            telefoneMask.install(txtTelefone);
+        } catch (ParseException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
     }
 }

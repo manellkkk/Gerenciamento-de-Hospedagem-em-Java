@@ -3,15 +3,22 @@ package com.manel.hospedagem.controller;
 import com.manel.hospedagem.dao.ClienteDAO;
 import com.manel.hospedagem.dto.ClienteDTO;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class ClienteController {
-    public String mensagem;
+    public String mensagem = "nada";
+
+    public String getMensagem() {
+        return mensagem;
+    }
     
     public Boolean adicionarCliente(String nome, String CPF, String telefone, String placaDoCarro){
         String cpf = CPF.trim();
         if(nome.isEmpty() || isCPFInvalido(cpf)){
-            mensagem = "Nome e/ou CPF inválidos.";
+            mensagem = "Nome e/ou CPF inválido(s).";
             JOptionPane.showMessageDialog(null, mensagem, "Erro", JOptionPane.ERROR_MESSAGE);
             return false;
         }
@@ -36,6 +43,48 @@ public class ClienteController {
             JOptionPane.showMessageDialog(null, mensagem, "Erro", JOptionPane.ERROR_MESSAGE);
             return false;
         }
+    }
+    
+    public void removerCliente(String cpf){
+        ClienteDAO clienteDAO = new ClienteDAO();
+        try {
+            clienteDAO.removerCliente(cpf);
+            mensagem = "Cliente removido com sucesso.";
+            JOptionPane.showMessageDialog(null, mensagem, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+        } catch (SQLException ex) {
+            mensagem = clienteDAO.getMensagem();
+            JOptionPane.showMessageDialog(null, mensagem, "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    public ArrayList<ClienteDTO> selecionarPorNome(String nome) throws SQLException{
+        ArrayList<ClienteDTO> clientes = new ArrayList();
+        ClienteDAO clienteDAO = new ClienteDAO();
+        
+        clientes = clienteDAO.selecionarPorNome(nome);
+        return clientes;
+    }
+    
+    public ArrayList<ClienteDTO> selecionarTodos(){
+        ArrayList<ClienteDTO> clientes = new ArrayList();
+        ClienteDAO clienteDAO = new ClienteDAO();
+        
+        try {
+            clientes = clienteDAO.selecionarTodos();
+            return clientes;
+        } catch (SQLException ex) {
+            mensagem = "Não foi possível selecionar: ";
+            mensagem += ex.getMessage();
+            return null;
+        }
+    }
+    
+    public ArrayList<ClienteDTO> selecionarPorCPF(String cpf) throws SQLException{
+        ArrayList<ClienteDTO> clientes = new ArrayList();
+        ClienteDAO clienteDAO = new ClienteDAO();
+        
+        clientes = clienteDAO.selecionarPorCPF(cpf);
+        return clientes;
     }
     
     private static boolean isCPFInvalido(String cpf) {

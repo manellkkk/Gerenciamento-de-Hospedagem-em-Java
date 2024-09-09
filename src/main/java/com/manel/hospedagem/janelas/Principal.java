@@ -1,5 +1,12 @@
 package com.manel.hospedagem.janelas;
 
+import com.manel.hospedagem.janelas.cadastro.CadastroProduto;
+import com.manel.hospedagem.janelas.cadastro.CadastroCliente;
+import com.manel.hospedagem.janelas.consulta.ConsultaCliente;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 public class Principal extends javax.swing.JFrame {
@@ -55,6 +62,11 @@ public class Principal extends javax.swing.JFrame {
         menuConsulta.setText("Consulta");
 
         itemClientes.setText("Cliente");
+        itemClientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemClientesActionPerformed(evt);
+            }
+        });
         menuConsulta.add(itemClientes);
 
         itemProdutos.setText("Produto");
@@ -88,6 +100,14 @@ public class Principal extends javax.swing.JFrame {
     private void itemProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemProdutoActionPerformed
         CadastroProduto cadProduto = new CadastroProduto();
     }//GEN-LAST:event_itemProdutoActionPerformed
+
+    private void itemClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemClientesActionPerformed
+        try {
+            ConsultaCliente conCliente = new ConsultaCliente();
+        } catch (ParseException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_itemClientesActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar barPrincipal;

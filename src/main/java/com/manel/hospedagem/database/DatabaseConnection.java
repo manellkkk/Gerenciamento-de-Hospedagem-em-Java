@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class DatabaseConnection {
@@ -34,13 +36,20 @@ public class DatabaseConnection {
             } catch (SQLException e) {
                 mensagem = "Erro ao desconectar no banco: ";
                 mensagem += e.getMessage();
-                JOptionPane.showMessageDialog(null, mensagem);
+                JOptionPane.showMessageDialog(null, mensagem, "Erro", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
 
-    public PreparedStatement prepareStatement(String query) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(query);
-        return statement;
+    public PreparedStatement prepareStatement(String query){
+        PreparedStatement statement;
+        try {
+            statement = connection.prepareStatement(query);
+            return statement;
+        } catch (SQLException ex) {
+            mensagem = ex.getMessage();
+            JOptionPane.showMessageDialog(null, mensagem, "Erro", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
     }
 }

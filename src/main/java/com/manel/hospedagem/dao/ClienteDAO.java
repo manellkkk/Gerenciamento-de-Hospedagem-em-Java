@@ -6,11 +6,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class ClienteDAO {
     private final DatabaseConnection connection = new DatabaseConnection();
     private String mensagem;
+
+    public String getMensagem() {
+        return mensagem;
+    }
     
     public void adicionarCliente(ClienteDTO cliente) throws SQLException {
         connection.openConnection();
@@ -22,22 +29,19 @@ public class ClienteDAO {
         statement.setString(3, cliente.getTelefone());
         statement.setString(4, cliente.getPlacaDoCarro());
         statement.executeUpdate();
-        mensagem = "Inserido.";
+        mensagem = "Inserido com sucesso.";
         
         connection.closeConnection();
     }
     
-    public void removerCliente(ClienteDTO cliente) throws SQLException {
+    public void removerCliente(String cpf) throws SQLException {
         connection.openConnection();
         
-        String query = "DELETE FROM cliente WHERE nome = ? AND cpf = ? AND telefone = ? AND placaDoCarro = ?";
+        String query = "DELETE FROM cliente WHERE cpf = ?";
         PreparedStatement statement = connection.prepareStatement(query);
-        statement.setString(1, cliente.getNome());
-        statement.setString(2, cliente.getCPF());
-        statement.setString(3, cliente.getTelefone());
-        statement.setString(4, cliente.getPlacaDoCarro());
+        statement.setString(1, cpf);
         statement.executeUpdate();
-        mensagem = "Excluído.";
+        mensagem = "Excluído com sucesso.";
         
         connection.closeConnection();
     }
@@ -52,33 +56,64 @@ public class ClienteDAO {
         statement.setString(3, cliente.getPlacaDoCarro());
         statement.setString(4, cliente.getCPF());
         statement.executeUpdate();
-        mensagem = "Editado.";
+        mensagem = "Editado com sucesso.";
         
         connection.closeConnection();
     }
     
-    public ClienteDTO selecionarCliente(String cpf) throws SQLException {
+    public ArrayList<ClienteDTO> selecionarTodos() throws SQLException {
+        String query = "SELECT * FROM Cliente";
+        ArrayList<ClienteDTO> clientes = new ArrayList();
+        
         connection.openConnection();
-
-        String query = "SELECT idCliente FROM Cliente WHERE cpf = ?";
         PreparedStatement statement = connection.prepareStatement(query);
-        statement.setString(1, cpf);
-
         ResultSet resultSet = statement.executeQuery();
-        if (resultSet.next()) {
-            int idCliente = resultSet.getInt("idCliente");
-            String nome = resultSet.getString("nome");
+        
+        while (resultSet.next()) {
+            String nomeCliente = resultSet.getString("nome");
+            String cpf = resultSet.getString("cpf");
             String telefone = resultSet.getString("telefone");
             String placaDoCarro = resultSet.getString("placaDoCarro");
-            ClienteDTO cliente = new ClienteDTO(nome, cpf, telefone, placaDoCarro);
-            cliente.setIdCliente(idCliente);
-            connection.closeConnection();
-            return cliente;
-        } else {
-            mensagem = "Cliente não encontrado com o CPF fornecido.";
-            JOptionPane.showMessageDialog(null, mensagem, "Erro", JOptionPane.ERROR_MESSAGE);
-            connection.closeConnection();
-            return null;
+            
+            ClienteDTO cliente = new ClienteDTO(nomeCliente, cpf, telefone, placaDoCarro);
+            clientes.add(cliente);
         }
+        connection.closeConnection();
+        return clientes;
+    }
+    
+    public ArrayList<ClienteDTO> selecionarPorNome(String nome) throws SQLException{
+        String query = "SELECT * FROM Cliente WHERE nome LIKE ?";
+        ArrayList<ClienteDTO> clientes = new ArrayList();
+        clientes = consultarBanco(query, nome);
+        return clientes;
+    }
+    
+    public ArrayList<ClienteDTO> selecionarPorCPF(String cpf) throws SQLException {
+        String query = "SELECT * FROM Cliente WHERE cpf LIKE ?";
+        ArrayList<ClienteDTO> clientes = new ArrayList();
+        clientes = consultarBanco(query, cpf);
+        return clientes;
+    }
+    
+    private ArrayList<ClienteDTO> consultarBanco(String query, String target) throws SQLException{
+        connection.openConnection();
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, "%" + target + "%");
+        ResultSet resultSet = statement.executeQuery();
+        
+        ArrayList<ClienteDTO> clientes = new ArrayList();
+        
+        while (resultSet.next()) {
+            String nomeCliente = resultSet.getString("nome");
+            String cpf = resultSet.getString("cpf");
+            String telefone = resultSet.getString("telefone");
+            String placaDoCarro = resultSet.getString("placaDoCarro");
+            
+            ClienteDTO cliente = new ClienteDTO(nomeCliente, cpf, telefone, placaDoCarro);
+            clientes.add(cliente);
+        }
+        connection.closeConnection();
+        return clientes;
     }
 }
