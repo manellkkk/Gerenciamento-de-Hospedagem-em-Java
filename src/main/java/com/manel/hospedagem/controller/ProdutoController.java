@@ -3,6 +3,7 @@ package com.manel.hospedagem.controller;
 import com.manel.hospedagem.dao.ProdutoDAO;
 import com.manel.hospedagem.dto.ProdutoDTO;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 public class ProdutoController {
@@ -28,7 +29,7 @@ public class ProdutoController {
             return false;
         }
         
-        ProdutoDTO produto = new ProdutoDTO(nome, qtd, dValor);
+        ProdutoDTO produto = new ProdutoDTO(0, nome, qtd, dValor);
         
         try {
             ProdutoDAO produtoDAO = new ProdutoDAO();
@@ -44,20 +45,47 @@ public class ProdutoController {
         }
     }
     
-    public Boolean removerProduto(String nome, int quantidade, double valor){
-        ProdutoDTO produto = new ProdutoDTO(nome, quantidade, valor);
-        
+    public Boolean removerProduto(int idProduto){
+        ProdutoDAO produtoDAO = new ProdutoDAO();
         try {
-            ProdutoDAO produtoDAO = new ProdutoDAO();
-            produtoDAO.removerProduto(produto);
-            mensagem = "Produto excluído com sucesso.";
+            produtoDAO.removerProduto(idProduto);
+            mensagem = "Produto removido com sucesso.";
             JOptionPane.showMessageDialog(null, mensagem, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             return true;
-        } catch (SQLException e) {
-            mensagem = "Erro ao remover produto: ";
-            mensagem += e.getMessage();
+        } catch (SQLException ex) {
+            mensagem = produtoDAO.getMensagem();
             JOptionPane.showMessageDialog(null, mensagem, "Erro", JOptionPane.ERROR_MESSAGE);
             return false;
         }
+    }
+    
+    public ArrayList<ProdutoDTO> selecionarTodos(){
+        ArrayList<ProdutoDTO> produtos = new ArrayList();
+        ProdutoDAO produtoDAO = new ProdutoDAO();
+        
+        try {
+            produtos = produtoDAO.selecionarTodos();
+            return produtos;
+        } catch (SQLException ex) {
+            mensagem = "Não foi possível selecionar: ";
+            mensagem += ex.getMessage();
+            return null;
+        }
+    }
+    
+    public ArrayList<ProdutoDTO> selecionarPorNome(String nome) throws SQLException{
+        ArrayList<ProdutoDTO> produtos = new ArrayList();
+        ProdutoDAO produtoDAO = new ProdutoDAO();
+        
+        produtos = produtoDAO.selecionarPorNome(nome);
+        return produtos;
+    }
+    
+    public ArrayList<ProdutoDTO> selecionarPorID(String id) throws SQLException{
+        ArrayList<ProdutoDTO> produtos = new ArrayList();
+        ProdutoDAO produtoDAO = new ProdutoDAO();
+        
+        produtos = produtoDAO.selecionarPorID(id);
+        return produtos;
     }
 }

@@ -85,18 +85,24 @@ public class ClienteDAO {
     public ArrayList<ClienteDTO> selecionarPorNome(String nome) throws SQLException{
         String query = "SELECT * FROM Cliente WHERE nome LIKE ?";
         ArrayList<ClienteDTO> clientes = new ArrayList();
-        clientes = consultarBanco(query, nome);
+        clientes = consultarClientesBanco(query, nome);
         return clientes;
     }
     
     public ArrayList<ClienteDTO> selecionarPorCPF(String cpf) throws SQLException {
         String query = "SELECT * FROM Cliente WHERE cpf LIKE ?";
         ArrayList<ClienteDTO> clientes = new ArrayList();
-        clientes = consultarBanco(query, cpf);
+        clientes = consultarClientesBanco(query, cpf);
         return clientes;
     }
     
-    private ArrayList<ClienteDTO> consultarBanco(String query, String target) throws SQLException{
+    public ClienteDTO selecionarCliente(String cpf) throws SQLException {
+        String query = "SELECT * FROM Cliente WHERE cpf = ?";
+        ClienteDTO cliente = selecionarClienteBanco(query, cpf);
+        return cliente;
+    }
+    
+    private ArrayList<ClienteDTO> consultarClientesBanco(String query, String target) throws SQLException{
         connection.openConnection();
         PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, "%" + target + "%");
@@ -115,5 +121,26 @@ public class ClienteDAO {
         }
         connection.closeConnection();
         return clientes;
+    }
+    
+    private ClienteDTO selecionarClienteBanco(String query, String target) throws SQLException{
+        connection.openConnection();
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, target);
+        ResultSet resultSet = statement.executeQuery();
+
+        ClienteDTO cliente = null;
+
+        if (resultSet.next()) {
+            String nomeCliente = resultSet.getString("nome");
+            String cpf = resultSet.getString("cpf");
+            String telefone = resultSet.getString("telefone");
+            String placaDoCarro = resultSet.getString("placaDoCarro");
+
+            cliente = new ClienteDTO(nomeCliente, cpf, telefone, placaDoCarro);
+        }
+
+        connection.closeConnection();
+        return cliente;
     }
 }

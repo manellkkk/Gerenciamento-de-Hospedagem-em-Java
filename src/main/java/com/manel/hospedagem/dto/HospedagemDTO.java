@@ -3,27 +3,32 @@ package com.manel.hospedagem.dto;
 import java.util.Date;
 
 public class HospedagemDTO {
-    private int idHospedagem;
-    private int idCliente;
+    private final int idHospedagem;
+    private final String cpfCliente;
     private double valor;
     private Date dataEntrada;
     private Date dataSaida;
-    private Boolean ativo;
+    private int quarto;
 
-    public HospedagemDTO(int idCliente, double valor, Date dataEntrada, Date dataSaida) {
-        this.idCliente = idCliente;
+    public HospedagemDTO(int idHospedagem, String cpfCliente, double valor, Date dataEntrada, Date dataSaida, int quarto) {
+        this.idHospedagem = idHospedagem;
+        this.cpfCliente = cpfCliente;
         this.valor = valor;
         this.dataEntrada = dataEntrada;
         this.dataSaida = dataSaida;
-        this.ativo = false;
+        this.quarto = quarto;
     }
-    
+
     public int getIdHospedagem() {
         return idHospedagem;
     }
 
-    public int getIdCliente() {
-        return idCliente;
+    public void setValor(double valor) {
+        this.valor = valor;
+    }
+    
+    public String getCpfCliente() {
+        return cpfCliente;
     }
 
     public double getValor() {
@@ -50,13 +55,11 @@ public class HospedagemDTO {
         this.dataSaida = dataSaida;
     }
 
-    public Boolean getAtivo() {
-        return ativo;
+    public int getQuarto() {
+        return quarto;
     }
 
-    public void setAtivo(Boolean ativo) {
-        this.ativo = ativo;
+    public void setQuarto(int quarto) {
+        this.quarto = quarto;
     }
-    
-    
 }

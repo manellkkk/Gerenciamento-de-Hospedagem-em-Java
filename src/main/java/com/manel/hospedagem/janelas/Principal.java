@@ -1,8 +1,12 @@
 package com.manel.hospedagem.janelas;
 
+import com.manel.hospedagem.controller.JanelaController;
 import com.manel.hospedagem.janelas.cadastro.CadastroProduto;
 import com.manel.hospedagem.janelas.cadastro.CadastroCliente;
 import com.manel.hospedagem.janelas.consulta.ConsultaCliente;
+import com.manel.hospedagem.janelas.consulta.ConsultaHospedagem;
+import com.manel.hospedagem.janelas.consulta.ConsultaProduto;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -10,6 +14,16 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 public class Principal extends javax.swing.JFrame {
+    public static final String JanelaCadastro = "JanelaCadastro";
+    public static final String JanelaConsulta = "JanelaConsulta";
+    
+    JanelaController janelaController = new JanelaController();
+    CadastroCliente cadCliente = null;
+    ConsultaCliente conCliente = null;
+    CadastroProduto cadProduto = null;
+    ConsultaProduto conProduto = null;
+    ConsultaHospedagem conHospedagem = null;
+    
     public Principal() {
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -55,6 +69,11 @@ public class Principal extends javax.swing.JFrame {
         menuCadastro.add(itemProduto);
 
         itemHospedagem.setText("Hospedagem");
+        itemHospedagem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemHospedagemActionPerformed(evt);
+            }
+        });
         menuCadastro.add(itemHospedagem);
 
         barPrincipal.add(menuCadastro);
@@ -70,9 +89,19 @@ public class Principal extends javax.swing.JFrame {
         menuConsulta.add(itemClientes);
 
         itemProdutos.setText("Produto");
+        itemProdutos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemProdutosActionPerformed(evt);
+            }
+        });
         menuConsulta.add(itemProdutos);
 
         itemHospedagens.setText("Hospedagem");
+        itemHospedagens.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemHospedagensActionPerformed(evt);
+            }
+        });
         menuConsulta.add(itemHospedagens);
 
         barPrincipal.add(menuConsulta);
@@ -94,20 +123,32 @@ public class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void itemClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemClienteActionPerformed
-        CadastroCliente cadCliente = new CadastroCliente();
+        cadCliente = janelaController.abrirJanelaCadastroCliente(cadCliente);
     }//GEN-LAST:event_itemClienteActionPerformed
 
     private void itemProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemProdutoActionPerformed
-        CadastroProduto cadProduto = new CadastroProduto();
+        cadProduto = janelaController.abrirJanelaCadastroProduto(cadProduto);
     }//GEN-LAST:event_itemProdutoActionPerformed
 
     private void itemClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemClientesActionPerformed
+        conCliente = janelaController.abrirJanelaConsultaCliente(conCliente, JanelaConsulta);
+    }//GEN-LAST:event_itemClientesActionPerformed
+
+    private void itemHospedagemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemHospedagemActionPerformed
+        conCliente = janelaController.abrirJanelaConsultaCliente(conCliente, JanelaCadastro);
+    }//GEN-LAST:event_itemHospedagemActionPerformed
+
+    private void itemProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemProdutosActionPerformed
+        conProduto = janelaController.abrirJanelaConsultaProduto(conProduto);
+    }//GEN-LAST:event_itemProdutosActionPerformed
+
+    private void itemHospedagensActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemHospedagensActionPerformed
         try {
-            ConsultaCliente conCliente = new ConsultaCliente();
-        } catch (ParseException ex) {
+            conHospedagem = janelaController.abrirJanelaConsultaHospedagem(conHospedagem);
+        } catch (SQLException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_itemClientesActionPerformed
+    }//GEN-LAST:event_itemHospedagensActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar barPrincipal;
@@ -120,4 +161,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenu menuCadastro;
     private javax.swing.JMenu menuConsulta;
     // End of variables declaration//GEN-END:variables
+    
+    
 }

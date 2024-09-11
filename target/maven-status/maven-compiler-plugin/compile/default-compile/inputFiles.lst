@@ -1,3 +1,7 @@
+C:\Users\narci\OneDrive\Documentos\NetBeansProjects\hospedagem\src\main\java\com\manel\hospedagem\controller\JanelaController.java
+C:\Users\narci\OneDrive\Documentos\NetBeansProjects\hospedagem\src\main\java\com\manel\hospedagem\controller\HospedagemController.java
+C:\Users\narci\OneDrive\Documentos\NetBeansProjects\hospedagem\src\main\java\com\manel\hospedagem\janelas\consulta\GerenciarHospedagem.java
+C:\Users\narci\OneDrive\Documentos\NetBeansProjects\hospedagem\src\main\java\com\manel\hospedagem\janelas\consulta\ConsultaProduto.java
 C:\Users\narci\OneDrive\Documentos\NetBeansProjects\hospedagem\src\main\java\com\manel\hospedagem\janelas\cadastro\CadastroHospedagem.java
 C:\Users\narci\OneDrive\Documentos\NetBeansProjects\hospedagem\src\main\java\com\manel\hospedagem\database\DatabaseConnection.java
 C:\Users\narci\OneDrive\Documentos\NetBeansProjects\hospedagem\src\main\java\com\manel\hospedagem\dto\ProdutoDTO.java
@@ -6,8 +10,10 @@ C:\Users\narci\OneDrive\Documentos\NetBeansProjects\hospedagem\src\main\java\com
 C:\Users\narci\OneDrive\Documentos\NetBeansProjects\hospedagem\src\main\java\com\manel\hospedagem\Hospedagem.java
 C:\Users\narci\OneDrive\Documentos\NetBeansProjects\hospedagem\src\main\java\com\manel\hospedagem\dao\ProdutoDAO.java
 C:\Users\narci\OneDrive\Documentos\NetBeansProjects\hospedagem\src\main\java\com\manel\hospedagem\dto\ClienteDTO.java
+C:\Users\narci\OneDrive\Documentos\NetBeansProjects\hospedagem\src\main\java\com\manel\hospedagem\dao\HospedagemDAO.java
 C:\Users\narci\OneDrive\Documentos\NetBeansProjects\hospedagem\src\main\java\com\manel\hospedagem\janelas\consulta\ConsultaCliente.java
-C:\Users\narci\OneDrive\Documentos\NetBeansProjects\hospedagem\src\main\java\com\manel\hospedagem\janelas\Configuration.java
+C:\Users\narci\OneDrive\Documentos\NetBeansProjects\hospedagem\src\main\java\com\manel\hospedagem\janelas\consulta\ConsultaHospedagem.java
+C:\Users\narci\OneDrive\Documentos\NetBeansProjects\hospedagem\src\main\java\com\manel\hospedagem\janelas\EntradaConfig.java
 C:\Users\narci\OneDrive\Documentos\NetBeansProjects\hospedagem\src\main\java\com\manel\hospedagem\dto\HospedagemDTO.java
 C:\Users\narci\OneDrive\Documentos\NetBeansProjects\hospedagem\src\main\java\com\manel\hospedagem\controller\ClienteController.java
 C:\Users\narci\OneDrive\Documentos\NetBeansProjects\hospedagem\src\main\java\com\manel\hospedagem\janelas\cadastro\CadastroCliente.java

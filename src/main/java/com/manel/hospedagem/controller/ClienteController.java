@@ -4,8 +4,6 @@ import com.manel.hospedagem.dao.ClienteDAO;
 import com.manel.hospedagem.dto.ClienteDTO;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class ClienteController {
@@ -34,11 +32,11 @@ public class ClienteController {
         try {
             ClienteDAO clienteDAO = new ClienteDAO();
             clienteDAO.adicionarCliente(clienteDTO);
-            mensagem = "Usuário criado com sucesso.";
+            mensagem = "Cliente criado com sucesso.";
             JOptionPane.showMessageDialog(null, mensagem, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             return true;
         } catch (SQLException e) {
-            mensagem = "Erro ao criar usuário: ";
+            mensagem = "Erro ao criar cliente: ";
             mensagem += e.getMessage();
             JOptionPane.showMessageDialog(null, mensagem, "Erro", JOptionPane.ERROR_MESSAGE);
             return false;
@@ -63,6 +61,12 @@ public class ClienteController {
         
         clientes = clienteDAO.selecionarPorNome(nome);
         return clientes;
+    }
+    
+    public ClienteDTO selecionarCliente(String cpf) throws SQLException{
+        ClienteDAO clienteDAO = new ClienteDAO();
+        ClienteDTO cliente = clienteDAO.selecionarCliente(cpf);
+        return cliente;
     }
     
     public ArrayList<ClienteDTO> selecionarTodos(){

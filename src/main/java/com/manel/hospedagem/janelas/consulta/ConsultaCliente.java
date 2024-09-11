@@ -1,8 +1,14 @@
 package com.manel.hospedagem.janelas.consulta;
 
 import com.manel.hospedagem.controller.ClienteController;
+import com.manel.hospedagem.controller.JanelaController;
 import com.manel.hospedagem.dto.ClienteDTO;
+import static com.manel.hospedagem.janelas.Principal.JanelaCadastro;
+import static com.manel.hospedagem.janelas.Principal.JanelaConsulta;
 import com.manel.hospedagem.janelas.cadastro.CadastroCliente;
+import com.manel.hospedagem.janelas.cadastro.CadastroHospedagem;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -15,13 +21,19 @@ import javax.swing.text.MaskFormatter;
 
 public class ConsultaCliente extends javax.swing.JFrame {
     ClienteController clienteController = new ClienteController();
+    CadastroCliente cadCliente;
+    JanelaController janelaController = new JanelaController();
+    String parent;
     
-    public ConsultaCliente() throws ParseException {
+    public ConsultaCliente(String parent) throws ParseException {
         initComponents();
+        this.parent = parent;
         setLocationRelativeTo(null);
         setVisible(true);
         setResizable(false);
         carregarTabelaCliente();
+        configurarBotao();
+        fecharConfig();
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -36,10 +48,11 @@ public class ConsultaCliente extends javax.swing.JFrame {
         btnNovo = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
-        btnFechar = new javax.swing.JButton();
+        btnSelecionar = new javax.swing.JButton();
         txtConsulta = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Consultar cliente");
 
         cbConsulta.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nome", "CPF" }));
         cbConsulta.addActionListener(new java.awt.event.ActionListener() {
@@ -84,6 +97,7 @@ public class ConsultaCliente extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tblCliente.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         spConsulta.setViewportView(tblCliente);
 
         btnNovo.setText("Novo");
@@ -102,10 +116,10 @@ public class ConsultaCliente extends javax.swing.JFrame {
             }
         });
 
-        btnFechar.setText("Fechar");
-        btnFechar.addActionListener(new java.awt.event.ActionListener() {
+        btnSelecionar.setText("Selecionar");
+        btnSelecionar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFecharActionPerformed(evt);
+                btnSelecionarActionPerformed(evt);
             }
         });
 
@@ -134,7 +148,7 @@ public class ConsultaCliente extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(panelConsultaClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnConsultar, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnFechar, javax.swing.GroupLayout.Alignment.TRAILING))))
+                            .addComponent(btnSelecionar, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
         panelConsultaClienteLayout.setVerticalGroup(
@@ -153,7 +167,7 @@ public class ConsultaCliente extends javax.swing.JFrame {
                     .addComponent(btnNovo)
                     .addComponent(btnEditar)
                     .addComponent(btnExcluir)
-                    .addComponent(btnFechar))
+                    .addComponent(btnSelecionar))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
@@ -183,9 +197,8 @@ public class ConsultaCliente extends javax.swing.JFrame {
                 txtConsulta.setValue(null);
                 txtConsulta.setFormatterFactory(new DefaultFormatterFactory(cpfMask));
             } else{
-                txtConsulta.setValue(null);
-                txtConsulta.setFormatterFactory(null);
                 txtConsulta.setText("");
+                txtConsulta.setFormatterFactory(null);
             }
         } catch (ParseException ex) {
             Logger.getLogger(ConsultaCliente.class.getName()).log(Level.SEVERE, null, ex);
@@ -193,7 +206,7 @@ public class ConsultaCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_cbConsultaActionPerformed
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
-        CadastroCliente cadCliente = new CadastroCliente();
+        cadCliente = janelaController.abrirJanelaCadastroCliente(cadCliente);
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
@@ -209,29 +222,42 @@ public class ConsultaCliente extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnConsultarActionPerformed
 
-    private void btnFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFecharActionPerformed
-        dispose();
-    }//GEN-LAST:event_btnFecharActionPerformed
+    private void btnSelecionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelecionarActionPerformed
+        if(janelaCadastro()){
+            String cpf = selecionarCPFLinha();
+            if (cpf == null) {
+                return;
+            }
+            try {
+                CadastroHospedagem cadHospedagem = new CadastroHospedagem(clienteController.selecionarCliente(cpf));
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
+        } else if(janelaController.cadastroAbertoCliente(cadCliente)){
+            cadCliente.toFront();
+        } else{
+            dispose();
+        }
+    }//GEN-LAST:event_btnSelecionarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        DefaultTableModel modeloTabela = (DefaultTableModel) tblCliente.getModel();
-        int linhaSelecionada = tblCliente.getSelectedRow();
-        String cpf = (String) modeloTabela.getValueAt(linhaSelecionada, 1);
-        
+        String cpf = selecionarCPFLinha();
+        if (cpf == null) {
+            return;
+        }
         try {
             excluirLinha(cpf);
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Não foi possível excluir.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
-        linhaSelecionada = -1;
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConsultar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnExcluir;
-    private javax.swing.JButton btnFechar;
     private javax.swing.JButton btnNovo;
+    private javax.swing.JButton btnSelecionar;
     private javax.swing.JComboBox<String> cbConsulta;
     private javax.swing.JLabel lblConsultarPor;
     private javax.swing.JPanel panelConsultaCliente;
@@ -240,6 +266,7 @@ public class ConsultaCliente extends javax.swing.JFrame {
     private javax.swing.JFormattedTextField txtConsulta;
     // End of variables declaration//GEN-END:variables
     private void carregarTabelaCliente(){
+        tblCliente.getTableHeader().setReorderingAllowed(false);
         ArrayList<ClienteDTO> clientes = clienteController.selecionarTodos();
         carregarTabela(clientes);
     }
@@ -283,5 +310,40 @@ public class ConsultaCliente extends javax.swing.JFrame {
                 });
             }
         }
+    }
+    
+    private void configurarBotao(){
+        if(janelaCadastro()){
+            btnSelecionar.setEnabled(true);
+        } else{
+            btnSelecionar.setText("Fechar");
+        }
+    }
+    
+    private Boolean janelaCadastro(){
+        return parent.equals(JanelaCadastro);
+    }
+    
+    private String selecionarCPFLinha() {
+        int linhaSelecionada = tblCliente.getSelectedRow();
+        if (linhaSelecionada == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor, selecione uma linha.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+        DefaultTableModel modeloTabela = (DefaultTableModel) tblCliente.getModel();
+        return (String) modeloTabela.getValueAt(linhaSelecionada, 1);
+    }
+    
+    private void fecharConfig(){
+        addWindowListener(new WindowAdapter() {
+        @Override
+            public void windowClosing(WindowEvent e) {
+                if (janelaController.cadastroAbertoCliente(cadCliente)) {
+                    setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+                } else{
+                    dispose();
+                }
+            }
+        });
     }
 }

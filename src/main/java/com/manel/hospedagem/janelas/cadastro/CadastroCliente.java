@@ -1,10 +1,13 @@
 package com.manel.hospedagem.janelas.cadastro;
 
 import com.manel.hospedagem.controller.ClienteController;
-import static com.manel.hospedagem.janelas.Configuration.*;
+import static com.manel.hospedagem.janelas.EntradaConfig.*;
+import java.awt.Frame;
 import javax.swing.JTextField;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.text.ParseException;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;

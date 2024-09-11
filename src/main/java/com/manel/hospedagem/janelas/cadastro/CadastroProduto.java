@@ -1,7 +1,8 @@
 package com.manel.hospedagem.janelas.cadastro;
 
 import com.manel.hospedagem.controller.ProdutoController;
-import static com.manel.hospedagem.janelas.Configuration.*;
+import static com.manel.hospedagem.janelas.EntradaConfig.*;
+import static com.manel.hospedagem.janelas.Principal.JanelaConsulta;
 import javax.swing.JFrame;
 
 public class CadastroProduto extends javax.swing.JFrame {
