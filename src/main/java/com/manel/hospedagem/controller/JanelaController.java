@@ -2,6 +2,7 @@ package com.manel.hospedagem.controller;
 
 import com.manel.hospedagem.janelas.cadastro.CadastroCliente;
 import com.manel.hospedagem.janelas.cadastro.CadastroProduto;
+import com.manel.hospedagem.janelas.consulta.AdicionarConsumo;
 import com.manel.hospedagem.janelas.consulta.ConsultaCliente;
 import com.manel.hospedagem.janelas.consulta.ConsultaHospedagem;
 import com.manel.hospedagem.janelas.consulta.ConsultaProduto;
@@ -56,9 +57,9 @@ public class JanelaController {
         return cadProduto != null && cadProduto.isShowing();
     }
     
-    public ConsultaProduto abrirJanelaConsultaProduto(ConsultaProduto conProduto){
+    public ConsultaProduto abrirJanelaConsultaProduto(ConsultaProduto conProduto, String parent, int idHospedagem){
         if (consultaAbertaProduto(conProduto) == false) {
-            conProduto = new ConsultaProduto();
+            conProduto = new ConsultaProduto(parent, idHospedagem);
         } else {
             conProduto.toFront();
         }
@@ -66,6 +67,20 @@ public class JanelaController {
     }
     public Boolean consultaAbertaProduto(ConsultaProduto conProduto){
         return conProduto != null && conProduto.isShowing();
+    }
+    
+    //adicionar produto
+    public AdicionarConsumo abrirJanelaAdicionarConsumo(AdicionarConsumo addConsumo, int idProduto, int idHospedagem){
+        if (adicionarConsumoAberto(addConsumo) == false) {
+            addConsumo = new AdicionarConsumo(idProduto, idHospedagem);
+        } else {
+            addConsumo.toFront();
+        }
+        return addConsumo;
+    }
+    
+    public Boolean adicionarConsumoAberto(AdicionarConsumo addConsumo){
+        return addConsumo != null && addConsumo.isShowing();
     }
     
     //hospedagem

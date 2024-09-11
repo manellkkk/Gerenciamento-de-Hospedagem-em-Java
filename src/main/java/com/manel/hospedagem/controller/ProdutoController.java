@@ -59,6 +59,26 @@ public class ProdutoController {
         }
     }
     
+    public void alterarQuantidade(int idProduto, int quantidade){
+        ProdutoDAO produtoDAO = new ProdutoDAO();
+        produtoDAO.alterarQuantidade(idProduto, quantidade);
+        mensagem = "Produto removido com sucesso.";
+    }
+    
+    public ProdutoDTO selecionarProduto(int idProduto){
+        ProdutoDAO produtoDAO = new ProdutoDAO();
+        try {
+            ProdutoDTO produto = produtoDAO.selecionarProduto(idProduto);
+            mensagem = "Selecionado com sucesso.";
+            JOptionPane.showMessageDialog(null, mensagem, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            return produto;
+        } catch (SQLException ex) {
+            mensagem = produtoDAO.getMensagem();
+            JOptionPane.showMessageDialog(null, mensagem, "Erro", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+    
     public ArrayList<ProdutoDTO> selecionarTodos(){
         ArrayList<ProdutoDTO> produtos = new ArrayList();
         ProdutoDAO produtoDAO = new ProdutoDAO();

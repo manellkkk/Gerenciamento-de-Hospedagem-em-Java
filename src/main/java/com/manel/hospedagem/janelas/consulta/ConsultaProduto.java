@@ -5,6 +5,7 @@ import com.manel.hospedagem.controller.ProdutoController;
 import com.manel.hospedagem.dto.ProdutoDTO;
 import com.manel.hospedagem.janelas.EntradaConfig;
 import static com.manel.hospedagem.janelas.EntradaConfig.permitirNumero;
+import static com.manel.hospedagem.janelas.Principal.JanelaHospedagem;
 import com.manel.hospedagem.janelas.cadastro.CadastroProduto;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -18,11 +19,17 @@ public class ConsultaProduto extends javax.swing.JFrame {
     JanelaController janelaController = new JanelaController();
     ProdutoController produtoController = new ProdutoController();
     EntradaConfig entradaConfig = new EntradaConfig();
+    String parent;
+    int idHospedagem;
     
     CadastroProduto cadProduto = null;
+    AdicionarConsumo addConsumo = null;
     
-    public ConsultaProduto() {
+    public ConsultaProduto(String parent, int idHospedagem) {
         initComponents();
+        this.parent = parent;
+        this.idHospedagem = idHospedagem;
+        configurarBotao();
         setLocationRelativeTo(null);
         setVisible(true);
         setResizable(false);
@@ -45,7 +52,7 @@ public class ConsultaProduto extends javax.swing.JFrame {
         btnNovo = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
-        btnFechar = new javax.swing.JButton();
+        btnSelecionar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Consulta de produto");
@@ -112,10 +119,10 @@ public class ConsultaProduto extends javax.swing.JFrame {
             }
         });
 
-        btnFechar.setText("Fechar");
-        btnFechar.addActionListener(new java.awt.event.ActionListener() {
+        btnSelecionar.setText("Selecionar");
+        btnSelecionar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFecharActionPerformed(evt);
+                btnSelecionarActionPerformed(evt);
             }
         });
 
@@ -133,7 +140,7 @@ public class ConsultaProduto extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnExcluir)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnFechar))
+                        .addComponent(btnSelecionar))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelConsultaProdutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(spConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(panelConsultaProdutoLayout.createSequentialGroup()
@@ -162,7 +169,7 @@ public class ConsultaProduto extends javax.swing.JFrame {
                     .addComponent(btnNovo)
                     .addComponent(btnEditar)
                     .addComponent(btnExcluir)
-                    .addComponent(btnFechar))
+                    .addComponent(btnSelecionar))
                 .addGap(15, 15, 15))
         );
 
@@ -180,13 +187,17 @@ public class ConsultaProduto extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFecharActionPerformed
-        if (janelaController.cadastroAbertoProduto(cadProduto) == false){
+    private void btnSelecionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelecionarActionPerformed
+        if(janelaHospedagem()){
+            int idProduto = selecionarIDLinha();
+            addConsumo = janelaController.abrirJanelaAdicionarConsumo(addConsumo, idProduto, idHospedagem);
             dispose();
+        } else if(janelaController.adicionarConsumoAberto(addConsumo)){
+            addConsumo.toFront();
         } else{
-            cadProduto.toFront();
+            dispose();
         }
-    }//GEN-LAST:event_btnFecharActionPerformed
+    }//GEN-LAST:event_btnSelecionarActionPerformed
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
         cadProduto = janelaController.abrirJanelaCadastroProduto(cadProduto);
@@ -228,8 +239,8 @@ public class ConsultaProduto extends javax.swing.JFrame {
     private javax.swing.JButton btnConsultar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnExcluir;
-    private javax.swing.JButton btnFechar;
     private javax.swing.JButton btnNovo;
+    private javax.swing.JButton btnSelecionar;
     private javax.swing.JComboBox<String> cbConsulta;
     private javax.swing.JLabel lblConsultarPor;
     private javax.swing.JPanel panelConsultaProduto;
@@ -319,5 +330,17 @@ public class ConsultaProduto extends javax.swing.JFrame {
                 }
             }
         });
+    }
+    
+    private Boolean janelaHospedagem(){
+        return parent.equals(JanelaHospedagem);
+    }
+    
+    private void configurarBotao(){
+        if(janelaHospedagem()){
+            btnSelecionar.setEnabled(true);
+        } else{
+            btnSelecionar.setText("Fechar");
+        }
     }
 }

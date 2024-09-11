@@ -7,15 +7,14 @@ import com.manel.hospedagem.janelas.consulta.ConsultaCliente;
 import com.manel.hospedagem.janelas.consulta.ConsultaHospedagem;
 import com.manel.hospedagem.janelas.consulta.ConsultaProduto;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 public class Principal extends javax.swing.JFrame {
     public static final String JanelaCadastro = "JanelaCadastro";
     public static final String JanelaConsulta = "JanelaConsulta";
+    public static final String JanelaHospedagem = "JanelaHospedagem";
     
     JanelaController janelaController = new JanelaController();
     CadastroCliente cadCliente = null;
@@ -139,7 +138,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_itemHospedagemActionPerformed
 
     private void itemProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemProdutosActionPerformed
-        conProduto = janelaController.abrirJanelaConsultaProduto(conProduto);
+        conProduto = janelaController.abrirJanelaConsultaProduto(conProduto, "Principal", 0);
     }//GEN-LAST:event_itemProdutosActionPerformed
 
     private void itemHospedagensActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemHospedagensActionPerformed

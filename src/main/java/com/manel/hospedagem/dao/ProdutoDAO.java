@@ -41,10 +41,28 @@ public class ProdutoDAO {
         connection.closeConnection();
     }
     
+    public Boolean alterarQuantidade(int idProduto, int quantidade){
+        try{
+            connection.openConnection();
+            
+            String query = "UPDATE produto SET quantidade = ? WHERE idProduto = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, quantidade);
+            statement.setInt(2, idProduto);
+            statement.executeUpdate();
+            mensagem = "Alterado.";
+            return true;
+        } catch(SQLException ex){
+            mensagem = "Não foi possível alterar a quantidade.";
+            connection.closeConnection();
+            return false;
+        }
+    }
+    
     public ProdutoDTO selecionarProduto(int id) throws SQLException {
         connection.openConnection();
 
-        String query = "SELECT idProduto, nome, quantidade, valor FROM Produto WHERE ídProduto = ?";
+        String query = "SELECT idProduto, nome, quantidade, valor FROM produto WHERE idProduto = ?";
         PreparedStatement statement = connection.prepareStatement(query);
         statement.setInt(1, id);
 
