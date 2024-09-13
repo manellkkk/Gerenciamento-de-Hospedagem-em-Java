@@ -5,6 +5,9 @@ import com.manel.hospedagem.dto.HospedagemDTO;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -69,6 +72,20 @@ public class HospedagemController {
             JOptionPane.showMessageDialog(null, mensagem, "Erro", JOptionPane.ERROR_MESSAGE);
             return false;
         }
+    }
+    
+    public long diferencaDias(HospedagemDTO hospedagemDTO){
+        Date dataEntrada = hospedagemDTO.getDataEntrada();
+        Date dataSaida = hospedagemDTO.getDataSaida();
+        
+        if(dataSaida == null){
+            dataSaida = new Date();
+        }
+        
+        LocalDate localDateEntrada = dataEntrada.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate localDateSaida = dataSaida.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        
+        return ChronoUnit.DAYS.between(localDateEntrada, localDateSaida);
     }
     
     public Boolean removerHospedagem(String id){

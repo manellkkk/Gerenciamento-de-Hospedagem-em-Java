@@ -7,7 +7,7 @@ import com.manel.hospedagem.controller.JanelaController;
 import com.manel.hospedagem.controller.ProdutoController;
 import com.manel.hospedagem.dto.ClienteDTO;
 import com.manel.hospedagem.dto.HospedagemDTO;
-import com.manel.hospedagem.dto.ProdutoConsumidoDTO;
+import com.manel.hospedagem.dto.ConsumoDTO;
 import com.manel.hospedagem.dto.ProdutoDTO;
 import static com.manel.hospedagem.janelas.Principal.JanelaHospedagem;
 import java.sql.SQLException;
@@ -32,6 +32,7 @@ public class GerenciarHospedagem extends javax.swing.JFrame {
     HospedagemDTO hospedagemDTO;
     ClienteDTO clienteDTO;
     
+    
     private final String idHospedagem;
     
     public GerenciarHospedagem(String id) throws SQLException{
@@ -40,6 +41,7 @@ public class GerenciarHospedagem extends javax.swing.JFrame {
         this.hospedagemDTO = hospedagemController.selecionarHospedagem(id);
         this.clienteDTO = clienteController.selecionarCliente(hospedagemDTO.getCpfCliente());
         atualizarHospedagem();
+        carregarTabelaConsumo();
         verificarFinalizar();
         setLocationRelativeTo(null);
         setVisible(true);
@@ -67,7 +69,7 @@ public class GerenciarHospedagem extends javax.swing.JFrame {
         setTitle("Gerenciar hospedagem");
 
         lblConsultarPor.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
-        lblConsultarPor.setText("Informações do cliente");
+        lblConsultarPor.setText("Informações da hospedagem");
 
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
@@ -166,7 +168,7 @@ public class GerenciarHospedagem extends javax.swing.JFrame {
             }
         });
 
-        btnExcluir.setText("Excluir");
+        btnExcluir.setText("Desfazer");
         btnExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExcluirActionPerformed(evt);
@@ -249,12 +251,22 @@ public class GerenciarHospedagem extends javax.swing.JFrame {
     }//GEN-LAST:event_btnFinalizarActionPerformed
 
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
-        int id = Integer.valueOf(idHospedagem);
-        conProduto = janelaController.abrirJanelaConsultaProduto(conProduto, JanelaHospedagem, id);
+        conProduto = janelaController.abrirJanelaConsultaProduto(conProduto, JanelaHospedagem, hospedagemDTO.getIdHospedagem());
     }//GEN-LAST:event_btnAdicionarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        // TODO add your handling code here:
+        int idConsumo = selecionarIDLinha();
+        if (idConsumo == 0) {
+            return;
+        }
+        try {
+            excluirLinha(idConsumo);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Não foi possível excluir.", "Erro", JOptionPane.ERROR_MESSAGE);
+        } finally{
+            carregarTabelaConsumo();
+        }
+       
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
@@ -292,29 +304,50 @@ public class GerenciarHospedagem extends javax.swing.JFrame {
             hospedagemDTO.getValor(),
             hospedagemDTO.getDataEntrada(),
             hospedagemDTO.getDataSaida(),
-            hospedagemDTO.getQuarto()
+            hospedagemDTO.getQuarto(),
+            totalConsumo(hospedagemDTO.getIdHospedagem())
         });
+    }
+    
+    private double totalConsumo(int idHospedagem){
+        ConsumoController consumoController = new ConsumoController();
+        ArrayList<ConsumoDTO> consumos = new ArrayList();
+        
+        consumos = consumoController.selecionarPorHospedagem(idHospedagem);
+        
+        double totalConsumo = 0;
+        
+        
+        for (ConsumoDTO consumo : consumos){
+            totalConsumo += consumo.getValorTotal();
+        }
+        return totalConsumo;
+    }
+    
+    private void excluirLinha(int consumo) throws SQLException{
+        int resposta = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja excluir?", "Confirmação", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        if (resposta == JOptionPane.YES_OPTION) {
+            consumoController.removerConsumo(consumo);
+        }
     }
     
     private void carregarTabelaConsumo(){
         tblConsumo.getTableHeader().setReorderingAllowed(false);
-        ArrayList<ProdutoConsumidoDTO> produtosConsumidos = consumoController.selecionarTodos();
+        ArrayList<ConsumoDTO> produtosConsumidos = consumoController.selecionarPorHospedagem(hospedagemDTO.getIdHospedagem());
         carregarTabela(produtosConsumidos);
     }
     
-    private void carregarTabela(ArrayList<ProdutoConsumidoDTO> produtosConsumidos){
-        DefaultTableModel modeloTabela = (DefaultTableModel) tblConsumo.getModel(); 
+    private void carregarTabela(ArrayList<ConsumoDTO> produtosConsumidos){
+        DefaultTableModel modeloTabela = (DefaultTableModel) tblConsumo.getModel();
         modeloTabela.setRowCount(0);
         
-        ProdutoDTO produtoDTO = null;
-
         if (produtosConsumidos != null && !produtosConsumidos.isEmpty()){
-            for (ProdutoConsumidoDTO produto : produtosConsumidos){
-                produtoDTO = produtoController.selecionarProduto(produto.getIdProduto());
-
+            for (ConsumoDTO produto: produtosConsumidos){
+                ProdutoDTO produtoDTO = produtoController.selecionarProduto(produto.getIdProduto());
                 modeloTabela.addRow(new Object[]{
+                    produto.getIdConsumo(),
                     produtoDTO.getNome(),
-                    produto.getIdProduto(),
+                    produto.getData(),
                     produto.getData(),
                     produto.getQuantidade(),
                     produto.getValorTotal()
@@ -337,8 +370,21 @@ public class GerenciarHospedagem extends javax.swing.JFrame {
     private void verificarFinalizar(){
         if(hospedagemController.verificarHospedagem(hospedagemDTO.getIdHospedagem())){
             btnFinalizar.setEnabled(false);
+            btnAdicionar.setEnabled(false);
+            btnExcluir.setEnabled(false);
+            btnAtualizar.setVisible(false);
         } else{
             btnFinalizar.setEnabled(true);
         }
+    }
+    
+    private int selecionarIDLinha() {
+        int linhaSelecionada = tblConsumo.getSelectedRow();
+        if (linhaSelecionada == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor, selecione uma linha.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return 0;
+        }
+        DefaultTableModel modeloTabela = (DefaultTableModel) tblConsumo.getModel();
+        return (int) modeloTabela.getValueAt(linhaSelecionada, 0);
     }
 }

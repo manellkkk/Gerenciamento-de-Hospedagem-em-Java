@@ -70,7 +70,6 @@ public class ProdutoController {
         try {
             ProdutoDTO produto = produtoDAO.selecionarProduto(idProduto);
             mensagem = "Selecionado com sucesso.";
-            JOptionPane.showMessageDialog(null, mensagem, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             return produto;
         } catch (SQLException ex) {
             mensagem = produtoDAO.getMensagem();

@@ -9,6 +9,8 @@ public class HospedagemDTO {
     private Date dataEntrada;
     private Date dataSaida;
     private int quarto;
+    private double totalConsumo;
+    private double totalHospedagem;
 
     public HospedagemDTO(int idHospedagem, String cpfCliente, double valor, Date dataEntrada, Date dataSaida, int quarto) {
         this.idHospedagem = idHospedagem;
@@ -17,6 +19,22 @@ public class HospedagemDTO {
         this.dataEntrada = dataEntrada;
         this.dataSaida = dataSaida;
         this.quarto = quarto;
+    }
+
+    public double getTotalConsumo() {
+        return totalConsumo;
+    }
+
+    public void setTotalConsumo(double totalConsumo) {
+        this.totalConsumo = totalConsumo;
+    }
+
+    public double getTotalHospedagem() {
+        return totalHospedagem;
+    }
+
+    public void setTotalHospedagem(double totalHospedagem) {
+        this.totalHospedagem = totalHospedagem;
     }
 
     public int getIdHospedagem() {

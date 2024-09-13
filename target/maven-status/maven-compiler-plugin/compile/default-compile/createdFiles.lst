@@ -1,4 +1,3 @@
-com\manel\hospedagem\dto\ProdutoConsumidoDTO.class
 com\manel\hospedagem\janelas\consulta\GerenciarHospedagem$6.class
 com\manel\hospedagem\janelas\cadastro\CadastroCliente$2.class
 com\manel\hospedagem\janelas\consulta\ConsultaProduto$1.class
@@ -20,7 +19,6 @@ com\manel\hospedagem\controller\ProdutoController.class
 com\manel\hospedagem\janelas\cadastro\CadastroHospedagem.class
 com\manel\hospedagem\janelas\consulta\ConsultaCliente$1.class
 com\manel\hospedagem\janelas\consulta\ConsultaProduto$7.class
-com\manel\hospedagem\dao\ProdutoConsumidoDAO.class
 com\manel\hospedagem\Hospedagem.class
 com\manel\hospedagem\janelas\cadastro\CadastroHospedagem$2.class
 com\manel\hospedagem\janelas\consulta\GerenciarHospedagem$5.class
@@ -51,6 +49,7 @@ com\manel\hospedagem\janelas\consulta\GerenciarHospedagem.class
 com\manel\hospedagem\janelas\Principal$1.class
 com\manel\hospedagem\janelas\consulta\GerenciarHospedagem$4.class
 com\manel\hospedagem\janelas\EntradaConfig$3.class
+com\manel\hospedagem\dao\ConsumoDAO.class
 com\manel\hospedagem\janelas\consulta\ConsultaCliente$3.class
 com\manel\hospedagem\database\DatabaseConnection.class
 com\manel\hospedagem\janelas\consulta\ConsultaHospedagem$1.class
@@ -58,6 +57,7 @@ com\manel\hospedagem\janelas\consulta\ConsultaHospedagem$3.class
 com\manel\hospedagem\janelas\Principal$3.class
 com\manel\hospedagem\janelas\cadastro\CadastroProduto$2.class
 com\manel\hospedagem\janelas\consulta\GerenciarHospedagem$7.class
+com\manel\hospedagem\dto\ConsumoDTO.class
 com\manel\hospedagem\janelas\consulta\ConsultaCliente$6.class
 com\manel\hospedagem\janelas\consulta\ConsultaProduto$2.class
 com\manel\hospedagem\dto\ProdutoDTO.class

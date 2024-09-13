@@ -2,7 +2,7 @@ package com.manel.hospedagem.dto;
 
 import java.sql.Date;
 
-public class ProdutoConsumidoDTO {
+public class ConsumoDTO {
     private int idConsumo;
     private int idProduto;
     private int idHospedagem;
@@ -10,9 +10,10 @@ public class ProdutoConsumidoDTO {
     private int quantidade;
     private double valorTotal;
 
-    public ProdutoConsumidoDTO(int idConsumo, int idProduto, int idHospedagem, Date data, int quantidade, double valorTotal) {
+    public ConsumoDTO(int idConsumo, int idProduto, int idHospedagem, Date data, int quantidade, double valorTotal) {
         this.idConsumo = idConsumo;
         this.idProduto = idProduto;
+        this.idHospedagem = idHospedagem;
         this.data = data;
         this.quantidade = quantidade;
         this.valorTotal = valorTotal;
@@ -64,5 +65,10 @@ public class ProdutoConsumidoDTO {
 
     public void setValorTotal(double valorTotal) {
         this.valorTotal = valorTotal;
+    }
+
+    @Override
+    public String toString() {
+        return "ProdutoConsumidoDTO{" + "idConsumo=" + idConsumo + ", idProduto=" + idProduto + ", idHospedagem=" + idHospedagem + ", data=" + data + ", quantidade=" + quantidade + ", valorTotal=" + valorTotal + '}';
     }
 }

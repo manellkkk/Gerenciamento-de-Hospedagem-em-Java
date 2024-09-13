@@ -12,8 +12,8 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class AdicionarConsumo extends javax.swing.JFrame {
-    private int idProduto;
-    private int idHospedagem;
+    private final int idProduto;
+    private final int idHospedagem;
     private double total;
     
     ProdutoController produtoController = new ProdutoController();
@@ -203,13 +203,10 @@ public class AdicionarConsumo extends javax.swing.JFrame {
         int quantidade = Integer.parseInt(strquantidade);
         atualizarTotal(quantidade);
         
-        if(quantidade > produtoDTO.getQuantidade()){
-            JOptionPane.showMessageDialog(null, "Não há produtos suficiente.", "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
+        Boolean adicionado = consumoController.adicionarConsumo(this.idProduto, this.idHospedagem, quantidade, total);
+        if(adicionado){
+            dispose();
         }
-        produtoController.alterarQuantidade(idProduto, produtoDTO.getQuantidade() - quantidade);
-        consumoController.adicionarConsumo(idProduto, idHospedagem, quantidade, total);
-        dispose();
     }//GEN-LAST:event_btnAdicionarActionPerformed
 
     

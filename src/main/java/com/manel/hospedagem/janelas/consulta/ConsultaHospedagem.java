@@ -1,11 +1,14 @@
 package com.manel.hospedagem.janelas.consulta;
 
 import com.manel.hospedagem.controller.ClienteController;
+import com.manel.hospedagem.controller.ConsumoController;
 import com.manel.hospedagem.controller.HospedagemController;
 import com.manel.hospedagem.controller.JanelaController;
 import com.manel.hospedagem.dto.ClienteDTO;
+import com.manel.hospedagem.dto.ConsumoDTO;
 import com.manel.hospedagem.dto.HospedagemDTO;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -252,16 +255,52 @@ public class ConsultaHospedagem extends javax.swing.JFrame {
         if (hospedagens != null && !hospedagens.isEmpty()){
             for (HospedagemDTO hospedagem : hospedagens){
                 clienteDTO = clienteController.selecionarCliente(hospedagem.getCpfCliente());
+                
                 modeloTabela.addRow(new Object[]{
                     hospedagem.getIdHospedagem(),
                     clienteDTO.getNome(),
                     hospedagem.getValor(),
                     hospedagem.getDataEntrada(),
                     hospedagem.getDataSaida(),
-                    hospedagem.getQuarto()
+                    hospedagem.getQuarto(),
+                    totalConsumo(hospedagem.getIdHospedagem()),
                 });
             }
         }
+    }
+    
+    private double totalConsumo(int idHospedagem){
+        ConsumoController consumoController = new ConsumoController();
+        ArrayList<ConsumoDTO> consumos = new ArrayList();
+        
+        consumos = consumoController.selecionarPorHospedagem(idHospedagem);
+        
+        double totalConsumo = 0;
+        
+        
+        for (ConsumoDTO consumo : consumos){
+            totalConsumo += consumo.getValorTotal();
+        }
+        return totalConsumo;
+    }
+    
+    private double totalHospedagem(int idHospedagem){
+        HospedagemController hospedagemController = new HospedagemController();
+        
+        String id = String.valueOf(idHospedagem);
+        double totalHospedagem = 0;
+        
+        try {
+            HospedagemDTO hospedagemDTO = hospedagemController.selecionarHospedagem(id);
+
+            long diferenca = hospedagemController.diferencaDias(hospedagemDTO);
+            
+            totalHospedagem = diferenca * hospedagemDTO.getValor();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ConsultaHospedagem.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return totalHospedagem;
     }
     
     private void excluirLinha(String id) throws SQLException{
